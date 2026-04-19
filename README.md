@@ -1,6 +1,7 @@
 # Python Arduino GUI Controller
 
-Python GUI로 아두이노를 제어하는 예제 프로그램입니다.  
+Python GUI로 아두이노를 제어하는 예제 프로그램입니다.
+
 `tkinter` 기반 그래픽 화면에서 시리얼 포트를 연결하고 LED, PWM 출력, 서보모터를 제어할 수 있습니다.
 
 ## 구성 파일
@@ -8,13 +9,44 @@ Python GUI로 아두이노를 제어하는 예제 프로그램입니다.
 - `arduino_gui_controller.py`: Python GUI 프로그램
 - `arduino_serial_controller.ino`: 아두이노에 업로드할 예제 스케치
 - `requirements.txt`: Python 의존성
+- `install_and_run.bat`: 설치 후 바로 실행하는 Windows 배치 파일
+- `run.bat`: 이미 설치가 끝난 뒤 빠르게 실행하는 Windows 배치 파일
 
-## 설치
+## 가장 쉬운 실행 방법
+
+Windows에서 `install_and_run.bat` 파일을 더블클릭하세요.
+
+이 파일은 아래 작업을 자동으로 처리합니다.
+
+1. `.venv` 가상환경 생성
+2. `pyserial` 설치
+3. Python GUI 프로그램 실행
+
+PowerShell에서 실행하려면 다음 명령을 사용하세요.
+
+```powershell
+.\install_and_run.bat
+```
+
+## 직접 설치하고 실행하기
 
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 pip install -r requirements.txt
+python arduino_gui_controller.py
+```
+
+이미 설치가 끝났다면 다음 중 하나로 실행할 수 있습니다.
+
+```powershell
+.\run.bat
+```
+
+또는
+
+```powershell
+.\.venv\Scripts\python.exe arduino_gui_controller.py
 ```
 
 ## 아두이노 준비
@@ -25,13 +57,14 @@ pip install -r requirements.txt
 4. 업로드합니다.
 5. Arduino IDE의 시리얼 모니터는 닫아둡니다. 같은 포트를 Python과 동시에 사용할 수 없습니다.
 
-## 실행
+## 사용 방법
 
-```powershell
-python arduino_gui_controller.py
-```
-
-프로그램에서 COM 포트를 선택하고 `Connect`를 누른 뒤 제어하면 됩니다.
+1. Python 프로그램을 실행합니다.
+2. `Refresh`를 눌러 COM 포트를 갱신합니다.
+3. 아두이노 포트를 선택합니다.
+4. Baud rate는 아두이노 코드와 동일하게 `9600`으로 둡니다.
+5. `Connect`를 누릅니다.
+6. LED, PWM, Servo 제어 버튼과 슬라이더를 사용합니다.
 
 ## 명령 프로토콜
 
@@ -51,7 +84,47 @@ R pin           예: R 2         디지털 입력 읽기
 - PWM LED 밝기: PWM 지원 핀 3, 5, 6, 9, 10, 11 중 하나
 - 서보모터: 신호선 10번 핀, 전원 5V, GND 연결
 
-서보모터는 전류를 많이 쓰므로 USB 전원만으로 불안정하면 별도 5V 전원을 사용하고 GND를 아두이노와 공통으로 연결하세요.
+서보모터는 전류를 많이 사용합니다. USB 전원만으로 불안정하면 별도 5V 전원을 사용하고 GND를 아두이노와 공통으로 연결하세요.
+
+## 실행이 안 될 때
+
+### 1. `pyserial` 오류가 나는 경우
+
+아래 명령으로 설치하세요.
+
+```powershell
+pip install -r requirements.txt
+```
+
+가상환경을 사용하는 경우에는 다음 명령을 사용하세요.
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+```
+
+### 2. COM 포트가 보이지 않는 경우
+
+- 아두이노 USB 케이블을 다시 연결합니다.
+- Arduino IDE에서 보드와 포트가 잡히는지 확인합니다.
+- CH340 계열 호환 보드는 드라이버 설치가 필요할 수 있습니다.
+- `Refresh` 버튼을 다시 누릅니다.
+
+### 3. 연결이 실패하는 경우
+
+- Arduino IDE의 시리얼 모니터를 닫습니다.
+- 다른 프로그램이 같은 COM 포트를 사용 중인지 확인합니다.
+- Baud rate가 `9600`인지 확인합니다.
+- 아두이노에 `arduino_serial_controller.ino`가 업로드되어 있는지 확인합니다.
+
+### 4. PowerShell 실행 정책 오류가 나는 경우
+
+가상환경 활성화가 막히면 활성화하지 않고 아래처럼 실행해도 됩니다.
+
+```powershell
+.\.venv\Scripts\python.exe arduino_gui_controller.py
+```
+
+또는 `install_and_run.bat`를 더블클릭하세요.
 
 ## 보완 제안
 
